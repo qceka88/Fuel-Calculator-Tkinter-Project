@@ -1,39 +1,39 @@
 This is Fuel Amount Calculator!
 
-Some of output data may contains cyrilic alphabeth becouse sourse is Bulgarian Web Site.
+Small project based on my curren knowledge of programming with Python.
 
 <img alt='Image' width="300px" src="https://media.istockphoto.com/id/1021166110/vector/fuel-gauge-full-tank-round-black-car-dashboard-3d-device-on-metal-perforated-background.jpg?s=612x612&w=0&k=20&c=cgwbCR58HyAcrwr25ibEKiJ29uusehPl9fcoEjoslbs="/>
 
 
 [Replit Link](https://replit.com/@qceka88/Fuel-Calculator-Small-Project#main.py) to try it!
 
-
+![replit.png](replit.png)
 
 
 This small project is part from my education in [SoftUni](https://softuni.bg/),
 [Programming Fundamentals with Python - September2022](https://softuni.bg/trainings/3840/programming-fundamentals-with-python-september-2022)
 
-Basically this generator creates a sentence from six words.
-Name, Place, Verb, Noun, Adverb, Detail and follow construction:
+In generally this  calculator use data from web site.
 
-Sentence:
- + Who = Name + Place
- + Action = Adverb + Verb + Noun
- + Detail = Details is just detail consist in data
+For output data calculator use a user input data for Fuel Type, Average Consumtion of 
+vehicle and Input Data for distance that will be traveled. Calculate fuel price for 
+traveled distance based on average consumption of vehicle and output the price.
 
-Construction is similar to the picture below.
+First you need to check and validate the input data. After that can export the 
+the output information using integrated buttons.
 
-![img.png](img.png)
+Examples of this small project
 
-In the picture below are shown few examples of this program.
-
-![img_4.png](img_4.png)
+![img.png](example01.png)
 
 
-Some of the random generated sentences have non sense. 
-But this program is create
-only for having fun.
+![img.png](example02.png)
 
-!NB: in .docx file you can find the Problem description.
-Current variant of "code" is small improvisation based on
-this .docx file.
+
+![img.png](example03.png)
+
+
+Some of output data may contains cyrilic alphabeth becouse sourse is Bulgarian Web Site.
+
+With kindly permission of  [bg.fuelot.net](https://bg.fuelo.net/)
+
