@@ -1,6 +1,6 @@
-Random sentence generator. 
+This is Fuel Amount Calculator!
 
-Small Project 03.
+Some of output data may contains cyrilic alphabeth becouse sourse is Bulgarian Web Site.
 
 <img alt='Image' width="300px" src="https://media.istockphoto.com/id/1021166110/vector/fuel-gauge-full-tank-round-black-car-dashboard-3d-device-on-metal-perforated-background.jpg?s=612x612&w=0&k=20&c=cgwbCR58HyAcrwr25ibEKiJ29uusehPl9fcoEjoslbs="/>
 
