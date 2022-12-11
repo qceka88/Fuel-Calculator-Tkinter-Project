@@ -2,10 +2,10 @@ Random sentence generator.
 
 Small Project 03.
 
-<img alt='Image' width="300px" src="https://i.ytimg.com/vi/8A4alljvWu0/maxresdefault.jpg"/>
+<img alt='Image' width="300px" src="https://media.istockphoto.com/id/1021166110/vector/fuel-gauge-full-tank-round-black-car-dashboard-3d-device-on-metal-perforated-background.jpg?s=612x612&w=0&k=20&c=cgwbCR58HyAcrwr25ibEKiJ29uusehPl9fcoEjoslbs="/>
 
 
-[Replit Link](https://replit.com/@qceka88/The-generator#main.py) to try it!
+[Replit Link](https://replit.com/@qceka88/Fuel-Calculator-Small-Project#main.py) to try it!
 
 
 
