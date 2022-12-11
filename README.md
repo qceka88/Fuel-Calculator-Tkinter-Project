@@ -7,7 +7,7 @@ Small project based on my curren knowledge of programming with Python.
 
 [Replit Link](https://replit.com/@qceka88/Fuel-Calculator-Small-Project#main.py) to try it!
 
-![img.png](replit.png)
+![img.png](replit_shot.png)
 
 
 This small project is part from my education in [SoftUni](https://softuni.bg/),
