@@ -33,6 +33,9 @@ Examples of this small project
 ![img.png](example03.png)
 
 
+![img.png](example04.png)
+
+
 Some of output data may contains cyrilic alphabeth becouse sourse is Bulgarian Web Site.
 
 With kindly permission of  [bg.fuelot.net](https://bg.fuelo.net/)
