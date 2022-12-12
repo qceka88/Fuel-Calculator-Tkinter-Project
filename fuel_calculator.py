@@ -15,31 +15,45 @@ class FuelCalculator:
         self.input_fuel = ''
         self.input_consumption = 0
         self.input_distance = 0
+        self.valid_type = False
+        self.valid_consumtion = False
+        self.valid_distance = False
 
         if self.fuel_type_item.get() != "" and self.fuel_type_item.get().lower() in self.fuels_list:
             self.input_fuel_msg = 'Correct input type!'
             self.input_fuel = self.fuel_type_item.get().lower()
-        else:
+            self.valid_type = True
+        if not self.valid_type:
             self.input_fuel_msg = 'Incorrect fuel type!'
             self.message = messagebox.showerror('Fuel type', 'Fuel type must be in the list')
 
-        if self.consumption_item.get() != "" and not self.consumption_item.get().isalpha():
-            if float(self.consumption_item.get()) > 0:
-                self.input_consumption_msg = 'Correct input consumption!'
-                self.input_consumption = self.consumption_item.get()
-        else:
+        if self.consumption_item.get() != "":
+            consumption = self.consumption_item.get()
+            validate_consumption = re.match(r'(^|(?<=\s))-?(\d*)((\.|\,)\d+)?($|(?=\s))', consumption)
+            if validate_consumption:
+                consumption = consumption.replace(',', '.')
+                if float(consumption) > 0:
+                    self.input_consumption_msg = 'Correct input consumption!'
+                    self.input_consumption = consumption
+                    self.valid_consumtion = True
+        if not self.valid_consumtion:
             self.input_consumption_msg = 'Incorrect consumption input!'
             self.message = messagebox.showerror('Consumption',
-                                                'Consumption must be a number greater than zero.\n And must have dot [ . ] for delimeter!')
+                                                'Consumption must be a number greater than zero!')
 
-        if self.distance_item.get() != "" and not self.distance_item.get().isalpha():
-            if float(self.distance_item.get()) > 0:
-                self.input_distance_msg = 'Correct input distance!'
-                self.input_distance = self.distance_item.get()
-        else:
+        if self.distance_item.get() != "":
+            distance = self.distance_item.get()
+            validate_distance = re.match(r'(^|(?<=\s))-?(\d*)((\.|\,)\d+)?($|(?=\s))', distance)
+            if validate_distance:
+                distance = distance.replace(',', '.')
+                if float(distance) > 0:
+                    self.input_distance_msg = 'Correct input distance!'
+                    self.input_distance = distance
+                    self.valid_distance = True
+        if not self.valid_distance:
             self.input_distance_msg = 'Incorrect distance input!'
             self.message = messagebox.showerror('Distance',
-                                                'Distance must be a number greater than zero.\n And must have dot [ . ] for delimeter!')
+                                                'Distance must be a number greater than zero!')
 
         self.Check_data = self.input_fuel_msg, self.input_consumption_msg, self.input_distance_msg
 
@@ -62,39 +76,42 @@ class FuelCalculator:
             self.check_distance.insert(END, self.Check_data[2])
 
     def Result(self):
-        type_of_fuel, average_consumption, travel_distance = self.input_fuel, float(self.input_consumption), float(
-            self.input_distance)
-        message = ''
+        if self.valid_type and self.valid_consumtion and self.valid_distance:
+            type_of_fuel, average_consumption, travel_distance = self.input_fuel, float(self.input_consumption), float(
+                self.input_distance)
+            message = ''
 
-        target_url = f'https://bg.fuelo.net/fuel/type/{type_of_fuel}?lang=bg'
+            target_url = f'https://bg.fuelo.net/fuel/type/{type_of_fuel}?lang=bg'
 
-        response = requests.get(target_url)
-        soup = BeautifulSoup(response.text, 'html.parser')
+            response = requests.get(target_url)
+            soup = BeautifulSoup(response.text, 'html.parser')
 
-        html_output = soup.find_all('tbody')[-1].extract()
-        html_to_string = str(html_output)
-        fuel_stations = {}
+            html_output = soup.find_all('tbody')[-1].extract()
+            html_to_string = str(html_output)
+            fuel_stations = {}
 
-        for html_row in html_to_string.split('\n'):
-            match_brand = re.findall(r'title="(?P<gas_station>.+)"\/><\/a> (?P<type>.+)<\/td>', html_row)
-            match_price = re.findall(r'<td>(?P<price>.+) лв\.\/(кг|л)<\/td>', html_row)
-            if match_brand:
-                current_station = match_brand[0][0]
-                current_fuel = match_brand[0][1]
-                fuel_stations[current_station] = [current_fuel]
-            if match_price:
-                fuel_price = float(match_price[0][0].replace(',', '.'))
-                consumed_fuel = travel_distance / average_consumption
-                if type_of_fuel == 'methane':
-                    fuel_price = fuel_price / 5.6
-                total_price = fuel_price * consumed_fuel
-                fuel_stations[current_station].append(total_price)
+            for html_row in html_to_string.split('\n'):
+                match_brand = re.findall(r'title="(?P<gas_station>.+)"\/><\/a> (?P<type>.+)<\/td>', html_row)
+                match_price = re.findall(r'<td>(?P<price>.+) лв\.\/(кг|л)<\/td>', html_row)
+                if match_brand:
+                    current_station = match_brand[0][0]
+                    current_fuel = match_brand[0][1]
+                    fuel_stations[current_station] = [current_fuel]
+                if match_price:
+                    fuel_price = float(match_price[0][0].replace(',', '.'))
+                    consumed_fuel = travel_distance / average_consumption
+                    if type_of_fuel == 'methane':
+                        fuel_price = fuel_price / 5.6
+                    total_price = fuel_price * consumed_fuel
+                    fuel_stations[current_station].append(total_price)
 
-        for fuel_station, products in fuel_stations.items():
-            brand, price = products[0], products[1]
-            message += f'On fuel station: {fuel_station}\nThe amount of {brand} will cost {price:.2f}lv!\n'
+            for fuel_station, products in sorted(fuel_stations.items(), key=lambda x: (x[1][1])):
+                brand, price = products[0], products[1]
+                message += f'On fuel station: {fuel_station}\nThe amount of {brand} will cost {price:.2f}lv!\n\n'
 
-        self.message = messagebox.showinfo("Result", message)
+            self.message = messagebox.showinfo("Result", message)
+        else:
+            self.message = messagebox.showwarning("Result", 'Please enter a valid data for results!')
 
     def Quit(self):
         self.message = messagebox.askquestion('Exit', "Do you want to exit the application?")
