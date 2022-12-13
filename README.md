@@ -10,9 +10,9 @@ Small project based on my curren knowledge of programming with Python.
 ![img.png](replit_shot.png)
 
 
-This small project is part from my education in [SoftUni](https://softuni.bg/),
+This small project is not a part from my education in [SoftUni](https://softuni.bg/),
 [Programming Fundamentals with Python - September2022](https://softuni.bg/trainings/3840/programming-fundamentals-with-python-september-2022)
-
+But is the path to learn programming and Python.
 In generally this  calculator use data from web site.
 
 For output data calculator use a user input data for Fuel Type, Average Consumtion of 
