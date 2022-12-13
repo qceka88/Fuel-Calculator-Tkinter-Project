@@ -11,6 +11,10 @@ from bs4 import BeautifulSoup
 class FuelCalculator:
 
     def Check_data(self):
+        '''
+          :return: This method validate entered data from user. And returns boleans for each input from user.
+                   Also method shows messages for valid or not valid type of input!
+        '''
         self.fuels_list = ['gasoline', 'diesel', 'lpg', 'methane', 'dieselPlus', 'gasoline98plus']
         self.input_fuel = ''
         self.input_consumption = 0
@@ -18,6 +22,8 @@ class FuelCalculator:
         self.valid_type = False
         self.valid_consumtion = False
         self.valid_distance = False
+
+        # Validate type of fuel
 
         if self.fuel_type_item.get() != "" and self.fuel_type_item.get().lower() in self.fuels_list:
             self.input_fuel_msg = 'Correct input type!'
@@ -27,6 +33,7 @@ class FuelCalculator:
             self.input_fuel_msg = 'Incorrect fuel type!'
             self.message = messagebox.showerror('Fuel type', 'Fuel type must be in the list')
 
+        # Validate consumption of vehicle
         if self.consumption_item.get() != "":
             consumption = self.consumption_item.get()
             validate_consumption = re.match(r'(^|(?<=\s))-?(\d*)((\.|\,)\d+)?($|(?=\s))', consumption)
@@ -40,7 +47,7 @@ class FuelCalculator:
             self.input_consumption_msg = 'Incorrect consumption input!'
             self.message = messagebox.showerror('Consumption',
                                                 'Consumption must be a number greater than zero!')
-
+        # Validate distance for travel
         if self.distance_item.get() != "":
             distance = self.distance_item.get()
             validate_distance = re.match(r'(^|(?<=\s))-?(\d*)((\.|\,)\d+)?($|(?=\s))', distance)
@@ -57,6 +64,7 @@ class FuelCalculator:
 
         self.Check_data = self.input_fuel_msg, self.input_consumption_msg, self.input_distance_msg
 
+        # Show messages about valid messsages in boxes  for each input data
         if self.check_fuel != "":
             self.check_fuel.delete(0, END)
             self.check_fuel.insert(END, self.Check_data[0])
@@ -76,43 +84,65 @@ class FuelCalculator:
             self.check_distance.insert(END, self.Check_data[2])
 
     def Result(self):
-        if self.valid_type and self.valid_consumtion and self.valid_distance:
-            type_of_fuel, average_consumption, travel_distance = self.input_fuel, float(self.input_consumption), float(
-                self.input_distance)
-            message = ''
 
-            target_url = f'https://bg.fuelo.net/fuel/type/{type_of_fuel}?lang=bg'
+        '''
+        :return: If input data from user is invalid this method returns, a warning message.
+                 If input data is validated as correct. Method retunrs information about selected type of fuel,
+                 filled data from user about average consumption of vehicle and distance that
+                 user want to travel.
+        '''
 
-            response = requests.get(target_url)
-            soup = BeautifulSoup(response.text, 'html.parser')
+        valid_input_data = False
 
-            html_output = soup.find_all('tbody')[-1].extract()
-            html_to_string = str(html_output)
-            fuel_stations = {}
+        try:
+            if self.valid_type and self.valid_consumtion and self.valid_distance:
+                valid_input_data = True
+                type_of_fuel, average_consumption, travel_distance = self.input_fuel, float(
+                    self.input_consumption), float(
+                    self.input_distance)
+                message = ''
+                # web scrapping part that extract html data from target url
+                target_url = f'https://bg.fuelo.net/fuel/type/{type_of_fuel}?lang=bg'
 
-            for html_row in html_to_string.split('\n'):
-                match_brand = re.findall(r'title="(?P<gas_station>.+)"\/><\/a> (?P<type>.+)<\/td>', html_row)
-                match_price = re.findall(r'<td>(?P<price>.+) лв\.\/(кг|л)<\/td>', html_row)
-                if match_brand:
-                    current_station = match_brand[0][0]
-                    current_fuel = match_brand[0][1]
-                    fuel_stations[current_station] = [current_fuel]
-                if match_price:
-                    fuel_price = float(match_price[0][0].replace(',', '.'))
-                    consumed_fuel = travel_distance / average_consumption
-                    if type_of_fuel == 'methane':
-                        fuel_price = fuel_price / 5.6
-                    total_price = fuel_price * consumed_fuel
-                    fuel_stations[current_station].append(total_price)
+                response = requests.get(target_url)
+                soup = BeautifulSoup(response.text, 'html.parser')
 
-            for fuel_station, products in sorted(fuel_stations.items(), key=lambda x: (x[1][1])):
-                brand, price = products[0], products[1]
-                message += f'On fuel station: {fuel_station}\nThe amount of {brand} will cost {price:.2f}lv!\n\n'
+                html_output = soup.find_all('tbody')[-1].extract()
+                html_to_string = str(html_output)
+                fuel_stations = {}
 
-            self.message = messagebox.showinfo("Result", message)
-        else:
+                # Filter needed infromation in extracted html data
+                for html_row in html_to_string.split('\n'):
+                    match_brand = re.findall(r'title="(?P<gas_station>.+)"\/><\/a> (?P<type>.+)<\/td>', html_row)
+                    match_price = re.findall(r'<td>(?P<price>.+) лв\.\/(кг|л)<\/td>', html_row)
+                    if match_brand:
+                        current_station = match_brand[0][0]
+                        current_fuel = match_brand[0][1]
+                        fuel_stations[current_station] = [current_fuel]
+                    if match_price:
+                        fuel_price = float(match_price[0][0].replace(',', '.'))
+                        consumed_fuel = travel_distance / average_consumption
+                        if type_of_fuel == 'methane':
+                            fuel_price = fuel_price / 5.6
+                        total_price = fuel_price * consumed_fuel
+                        fuel_stations[current_station].append(total_price)
+
+                # Prepare output message with chosen fuel sorted by price
+
+                for station_name, products in sorted(fuel_stations.items(), key=lambda x: (x[1][1])):
+                    station_number = list(fuel_stations).index(station_name)
+                    brand, price = products[0], products[1]
+                    message += f'On fuel station {station_number+1}: {station_name}\nThe amount of {brand} will cost {price:.2f}lv!\n\n'
+
+                self.message = messagebox.showinfo("Result", message)
+
+        except AttributeError:
+            valid_input_data = False
+
+        if not valid_input_data:
             self.message = messagebox.showwarning("Result", 'Please enter a valid data for results!')
 
+    # This method is an action from Exit Button
     def Quit(self):
         self.message = messagebox.askquestion('Exit', "Do you want to exit the application?")
         if self.message == "yes":
@@ -120,6 +150,7 @@ class FuelCalculator:
         else:
             "return"
 
+    # Create user interface. For input and output information
     def __init__(self):
         self.root = tk.Tk()
         self.root.geometry('500x300')
@@ -151,7 +182,7 @@ class FuelCalculator:
         self.logo = Label(self.root, image=self.car_icon, bg="white")
         self.logo.place(x=560, y=350)
 
-        # ================== Items to for  input ===================
+        # Create fields for input data
         self.frame1 = LabelFrame(self.root, text="NEEDED INFORMATION", width=800, height=170,
                                  font=('verdana', 10, 'bold'),
                                  borderwidth=3, relief=RIDGE, highlightthickness=4, bg="white", highlightcolor="white",
@@ -175,7 +206,7 @@ class FuelCalculator:
         self.distance_item = Entry(self.frame1, width=25, borderwidth=3, relief=RAISED, bg="#ffdd88")
         self.distance_item.place(x=560, y=100)
 
-        # ============ Check data =================
+        # Create fields for output information about validate user inputs.
 
         self.frame2 = LabelFrame(self.root, text="CHECK DATA", width=480, height=140,
                                  font=('verdana', 10, 'bold'), borderwidth=3, relief=RIDGE, highlightthickness=4,
@@ -199,7 +230,8 @@ class FuelCalculator:
         self.check_distance = Entry(self.frame2, width=45, borderwidth=4, relief=SUNKEN, bg="#ffdd88")
         self.check_distance.place(y=70, x=170)
 
-        # ================== Functional  buttons ============
+        # Create a Functional Buttons and connect them with their functions
+
         self.Check_data_btn = Button(self.root, text="CHECK INPUT", relief=RAISED, borderwidth=2,
                                      font=('verdana', 10, 'bold'), bg='#248aa2', fg="white", command=self.Check_data)
         self.Check_data_btn.place(x=75, y=380)
