@@ -41,5 +41,7 @@ Examples of this small project
 
 Some, of output data may contain cyrilic alphabeth becouse sourse is Bulgarian Web Site.
 
-With kindly permission of  [bg.fuelot.net](https://bg.fuelo.net/)
+
+
+With kindly permission of    [![img.png](fuelo.png)](https://bg.fuelo.net/)
 
