@@ -259,7 +259,7 @@ class FuelCalculator:
         self.distance_item = Entry(self.frame1, width=25, borderwidth=3, relief=RAISED, bg="#ffdd88")
         self.distance_item.place(x=560, y=100)
 
-        # This part from __init__  fields for output information about validate user inputs.
+        # This part from __init__ create fields for output information about validate user inputs.
 
         self.frame2 = LabelFrame(self.root, text="CHECK DATA", width=480, height=140,
                                  font=('verdana', 10, 'bold'), borderwidth=3, relief=RIDGE, highlightthickness=4,
