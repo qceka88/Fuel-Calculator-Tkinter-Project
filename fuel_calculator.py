@@ -235,7 +235,7 @@ class FuelCalculator:
         self.logo = Label(self.root, image=self.car_icon, bg="white")
         self.logo.place(x=560, y=350)
 
-        # This part from __init__  fields for input data.
+        # This part from __init__  create the fields for input data.
         self.frame1 = LabelFrame(self.root, text="NEEDED INFORMATION", width=800, height=170,
                                  font=('verdana', 10, 'bold'),
                                  borderwidth=3, relief=RIDGE, highlightthickness=4, bg="white", highlightcolor="white",
