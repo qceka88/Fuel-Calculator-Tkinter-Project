@@ -12,7 +12,7 @@ class FuelCalculator:
 
     def Check_data(self):
         '''
-          :return: This method validate entered data from user. And returns boleans for each input from user.
+          :return: This method validate entered data from user.
                    Also method shows messages for valid or not valid type of input!
         '''
         self.fuels_list = ['gasoline', 'diesel', 'lpg', 'methane', 'dieselPlus', 'gasoline98plus']
