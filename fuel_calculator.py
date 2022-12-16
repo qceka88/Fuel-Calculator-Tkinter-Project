@@ -151,7 +151,7 @@ class FuelCalculator:
                     :return: This method create a new popup window to show output data for searching
 
                     """
-                # This is the part that creates a new window
+                # This is the part that creates a new window for result information
                 self.result_window = Toplevel()
                 self.result_window.geometry("1024x768")
                 self.result_window.title('Result of searching.')
@@ -159,9 +159,9 @@ class FuelCalculator:
                 self.logo = Label(self.result_window, image=self.dollar_icon, bg="white")
                 self.logo.place(x=440, y=5)
 
-                # This is the part that format the result of output data(like fonts, color, size etc.)
+                # This is the part that format the result of output data(like fonts, color,frame, size etc.)
                 self.frame3 = LabelFrame(self.result_window, text="TOP FIVE CHEAPEST GAS STATIONS", width=400,
-                                         height=350,
+                                         height=290,
                                          font=('Arial', 10, 'bold'),
                                          borderwidth=3, relief=RIDGE, highlightthickness=4, bg="white",
                                          highlightcolor="white",
@@ -169,7 +169,7 @@ class FuelCalculator:
                 self.frame3.place(x=15, y=5)
 
                 self.frame4 = LabelFrame(self.result_window, text="OTHER GAS STATIONS", width=450,
-                                         height=750,
+                                         height=(len(output_result_message) - 5) * 52,
                                          font=('Arial', 10, 'bold'),
                                          borderwidth=3, relief=RIDGE, highlightthickness=4, bg="white",
                                          highlightcolor="white",
@@ -235,7 +235,7 @@ class FuelCalculator:
         self.logo = Label(self.root, image=self.car_icon, bg="white")
         self.logo.place(x=560, y=350)
 
-        # This part from __init__  create the fields for input data.
+        # This part from __init__  create fields for input data.
         self.frame1 = LabelFrame(self.root, text="NEEDED INFORMATION", width=800, height=170,
                                  font=('verdana', 10, 'bold'),
                                  borderwidth=3, relief=RIDGE, highlightthickness=4, bg="white", highlightcolor="white",
@@ -259,7 +259,7 @@ class FuelCalculator:
         self.distance_item = Entry(self.frame1, width=25, borderwidth=3, relief=RAISED, bg="#ffdd88")
         self.distance_item.place(x=560, y=100)
 
-        # This part from __init__ create fields for output information about validate user inputs.
+        # This part from __init__ create  fields for output information about validate user inputs.
 
         self.frame2 = LabelFrame(self.root, text="CHECK DATA", width=480, height=140,
                                  font=('verdana', 10, 'bold'), borderwidth=3, relief=RIDGE, highlightthickness=4,
